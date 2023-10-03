@@ -1,93 +1,36 @@
 // App.js
+import React, { useState } from 'react';
+import './App.css';
+import TaskForm from './Taskform';
+import TaskList from './TaskList';
+import TaskItem from './TaskItem';
 
-   import React, { useState } from 'react';
+function App() {
+  const [tasks, setTasks] = useState([]);
 
-   import TaskList from './TaskList';
+  const addTask = (newTask) => {
+    setTasks([...tasks, { ...newTask, id: tasks.length + 1 }]);
+  };
 
-   import TaskForm from './TaskForm';
+  const editTask = (taskId, updatedTask) => {
+    const updatedTasks = tasks.map((task) =>
+      task.id === taskId ? { ...task, ...updatedTask } : task
+    );
+    setTasks(updatedTasks);
+  };
 
-   import Task from './Task';
+  const deleteTask = (taskId) => {
+    const updatedTasks = tasks.filter((task) => task.id !== taskId);
+    setTasks(updatedTasks);
+  };
 
- 
+  return (
+    <div className="App">
+      <h1>Task Master Dashboard</h1>
+      <TaskForm addTask={addTask} />
+      <TaskList tasks={tasks} editTask={editTask} deleteTask={deleteTask} />
+    </div>
+  );
+}
 
-   const App = () => {
-
-     const [tasks, setTasks] = useState([]);
-
-     const [selectedTask, setSelectedTask] = useState(null);
-
- 
-
-     const handleAddTask = (newTask) => {
-
-       // Create a new task with a unique ID and mark it as not completed
-
-       const task = { ...newTask, id: tasks.length + 1, completed: false };
-
-       setTasks([...tasks, task]);
-
-     };
-
- 
-
-     const handleTaskClick = (taskId) => {
-
-       // Find and select the clicked task
-
-       const task = tasks.find((t) => t.id === taskId);
-
-       setSelectedTask(task);
-
-     };
-
- 
-
-     const handleEditTask = (editedTask) => {
-
-       // Update the task and clear the selection
-
-       setTasks(tasks.map((task) => (task.id === editedTask.id ? editedTask : task)));
-
-       setSelectedTask(null);
-
-     };
-
- 
-
-     const handleDeleteTask = (taskId) => {
-
-       // Delete the task and clear the selection
-
-       setTasks(tasks.filter((task) => task.id !== taskId));
-
-       setSelectedTask(null);
-
-     };
-
- 
-
-     return (
-
-       <div>
-
-         <h1>TaskMaster</h1>
-
-         <TaskForm onTaskAdd={handleAddTask} />
-
-         <TaskList tasks={tasks} onTaskClick={handleTaskClick} />
-
-         {selectedTask && (
-
-           <Task task={selectedTask} onEdit={handleEditTask} onDelete={handleDeleteTask} />
-
-         )}
-
-       </div>
-
-     );
-
-   };
-
- 
-
-   export default App;
+export default App;
