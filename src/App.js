@@ -1,10 +1,7 @@
-// App.js
-
-   import React, { useState } from 'react';
-
-   import TaskList from './TaskList';
-
-   import TaskForm from './TaskForm';
+import React, { useState } from 'react';
+import TaskForm from './Taskform';
+import TaskList from './TaskList';
+import './App.css';
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -27,9 +24,22 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Task Master Dashboard</h1>
-      <TaskForm addTask={addTask} />
-      <TaskList tasks={tasks} editTask={editTask} deleteTask={deleteTask} />
+      <nav>
+        <ul>
+          <li>
+            <a href="/">Home</a>
+          </li>
+          <li>
+            <a href="/calendar">Calendar</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div className="task-form-container">
+        <h1>Task Master Dashboard</h1>
+        <TaskForm addTask={addTask} />
+        <TaskList tasks={tasks} editTask={editTask} deleteTask={deleteTask} />
+      </div>
     </div>
   );
 }

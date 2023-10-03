@@ -1,5 +1,5 @@
-// TaskForm.js
 import React, { useState } from 'react';
+import './Taskform.css';
 
 const TaskForm = ({ addTask }) => {
   const [title, setTitle] = useState('');
@@ -17,7 +17,7 @@ const TaskForm = ({ addTask }) => {
   };
 
   return (
-    <div>
+    <div className="task-form">
       <h2>Add Task</h2>
       <form onSubmit={handleSubmit}>
         <input
