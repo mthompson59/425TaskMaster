@@ -2,7 +2,7 @@ import React from 'react';
 import TaskItem from './TaskItem';
 import './TaskList.css';
 
-const TaskList = ({ tasks, editTask, deleteTask }) => {
+const TaskList = ({ tasks, editTask, deleteTask, toggleComplete }) => {
   return (
     <div className="task-list">
       <h2>Task List</h2>
@@ -12,6 +12,7 @@ const TaskList = ({ tasks, editTask, deleteTask }) => {
           task={task}
           editTask={editTask}
           deleteTask={deleteTask}
+          toggleComplete={toggleComplete} // Pass down the toggleComplete function
         />
       ))}
     </div>

@@ -5,6 +5,7 @@ import './App.css';
 
 function App() {
   const [tasks, setTasks] = useState([]);
+  const [filter, setFilter] = useState('All'); // Initialize the filter state
 
   const addTask = (newTask) => {
     setTasks([...tasks, { ...newTask, id: tasks.length + 1 }]);
@@ -22,15 +23,31 @@ function App() {
     setTasks(updatedTasks);
   };
 
+  // Function to filter tasks based on the current filter
+  const filteredTasks = () => {
+    if (filter === 'All') {
+      return tasks;
+    } else if (filter === 'Completed') {
+      return tasks.filter((task) => task.completed);
+    } else if (filter === 'Incomplete') {
+      return tasks.filter((task) => !task.completed);
+    }
+  };
+
+  // Function to toggle task completion
+  const toggleComplete = (taskId) => {
+    const updatedTasks = tasks.map((task) =>
+      task.id === taskId ? { ...task, completed: !task.completed } : task
+    );
+    setTasks(updatedTasks);
+  };
+
   return (
     <div className="App">
       <nav>
         <ul>
           <li>
-            <a href="/">Home</a>
-          </li>
-          <li>
-            <a href="/calendar">Calendar</a>
+            <a href="/">TaskMaster Home</a>
           </li>
         </ul>
       </nav>
@@ -38,7 +55,12 @@ function App() {
       <div className="task-form-container">
         <h1>Task Master Dashboard</h1>
         <TaskForm addTask={addTask} />
-        <TaskList tasks={tasks} editTask={editTask} deleteTask={deleteTask} />
+        <div>
+          <button onClick={() => setFilter('All')}>All Tasks</button>
+          <button onClick={() => setFilter('Completed')}>Completed</button>
+          <button onClick={() => setFilter('Incomplete')}>Incomplete</button>
+        </div>
+        <TaskList tasks={filteredTasks()} editTask={editTask} deleteTask={deleteTask} toggleComplete={toggleComplete} />
       </div>
     </div>
   );

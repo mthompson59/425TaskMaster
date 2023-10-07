@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './TaskItem.css';
 
-const TaskItem = ({ task, editTask, deleteTask }) => {
+const TaskItem = ({ task, editTask, deleteTask, toggleComplete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTask, setEditedTask] = useState(task);
 
@@ -15,7 +15,7 @@ const TaskItem = ({ task, editTask, deleteTask }) => {
   };
 
   return (
-    <div className="task-item">
+    <div className={`task-item ${task.completed ? 'completed' : ''}`}>
       <div className="task-details">
         <h3>{task.title}</h3>
         <p>{task.description}</p>
@@ -51,6 +51,9 @@ const TaskItem = ({ task, editTask, deleteTask }) => {
           <div>
             <button onClick={handleEditClick}>Edit</button>
             <button onClick={() => deleteTask(task.id)}>Delete</button>
+            <button onClick={() => toggleComplete(task.id)}>
+              {task.completed ? 'Mark Incomplete' : 'Mark Complete'}
+            </button>
           </div>
         )}
       </div>
