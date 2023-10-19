@@ -48,7 +48,7 @@ const TaskForm = ({ addTask }) => {
           value={dueDate}
           onChange={handleDateChange}
           min="2023-10-01" 
-          max="2024-05-30" 
+          max="2026-05-30" 
         />
         <button type="submit">Add Task</button>
       </form>
