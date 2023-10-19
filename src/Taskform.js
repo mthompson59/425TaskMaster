@@ -6,6 +6,16 @@ const TaskForm = ({ addTask }) => {
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
 
+  const handleDateChange = (e) => {
+    const selectedDate = new Date(e.target.value);
+    const minDate = new Date('2023-10-01');
+    const maxDate = new Date('2024-05-01');
+
+    if (selectedDate >= minDate && selectedDate <= maxDate) {
+      setDueDate(e.target.value);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (title && description && dueDate) {
@@ -36,7 +46,9 @@ const TaskForm = ({ addTask }) => {
           type="date"
           placeholder="Due Date"
           value={dueDate}
-          onChange={(e) => setDueDate(e.target.value)}
+          onChange={handleDateChange}
+          min="2023-10-01" 
+          max="2024-05-30" 
         />
         <button type="submit">Add Task</button>
       </form>
