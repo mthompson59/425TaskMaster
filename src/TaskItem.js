@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './TaskItem.css';
+import axios from 'axios'; // Import Axios
 
-const TaskItem = ({ task, editTask, deleteTask, toggleComplete }) => {
+const TaskItem = ({ task, editTask, deleteTask }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTask, setEditedTask] = useState(task);
 
@@ -10,8 +11,39 @@ const TaskItem = ({ task, editTask, deleteTask, toggleComplete }) => {
   };
 
   const handleSaveClick = () => {
-    editTask(task.id, editedTask);
-    setIsEditing(false);
+    axios
+      .patch(`/api/tasks/${task.id}`, editedTask)
+      .then((response) => {
+        const updatedTask = response.data;
+        editTask(task.id, updatedTask);
+        setIsEditing(false);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleDeleteClick = () => {
+    axios
+      .delete(`/api/tasks/${task.id}`)
+      .then(() => {
+        deleteTask(task.id);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleToggleCompletionClick = () => {
+    axios
+      .patch(`/api/tasks/${task.id}`, { completed: !task.completed })
+      .then((response) => {
+        const updatedTask = response.data;
+        editTask(task.id, updatedTask);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -50,8 +82,8 @@ const TaskItem = ({ task, editTask, deleteTask, toggleComplete }) => {
         ) : (
           <div>
             <button onClick={handleEditClick}>Edit</button>
-            <button onClick={() => deleteTask(task.id)}>Delete</button>
-            <button onClick={() => toggleComplete(task.id)}>
+            <button onClick={handleDeleteClick}>Delete</button>
+            <button onClick={handleToggleCompletionClick}>
               {task.completed ? 'Mark Incomplete' : 'Mark Complete'}
             </button>
           </div>

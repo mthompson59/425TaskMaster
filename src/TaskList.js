@@ -1,18 +1,31 @@
-import React from 'react';
-import TaskItem from './TaskItem';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import TaskItem from './TaskItem'; // Import the TaskItem component
 import './TaskList.css';
 
 const TaskList = ({ tasks, editTask, deleteTask, toggleComplete }) => {
+  const [fetchedTasks, setFetchedTasks] = useState([]); // Use a different variable name
+
+  useEffect(() => {
+    axios.get('/api/tasks')
+      .then((response) => {
+        setFetchedTasks(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
   return (
     <div className="task-list">
       <h2>Task List</h2>
-      {tasks.map((task) => (
+      {fetchedTasks.map((task) => (
         <TaskItem
           key={task.id}
           task={task}
           editTask={editTask}
           deleteTask={deleteTask}
-          toggleComplete={toggleComplete} // Pass down the toggleComplete function
+          toggleComplete={toggleComplete}
         />
       ))}
     </div>
@@ -20,3 +33,4 @@ const TaskList = ({ tasks, editTask, deleteTask, toggleComplete }) => {
 };
 
 export default TaskList;
+

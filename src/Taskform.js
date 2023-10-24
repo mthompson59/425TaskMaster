@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Taskform.css';
+import axios from 'axios'; // Import Axios
 
 const TaskForm = ({ addTask }) => {
   const [title, setTitle] = useState('');
@@ -9,7 +10,17 @@ const TaskForm = ({ addTask }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (title && description && dueDate) {
-      addTask({ title, description, dueDate });
+      const newTask = { title, description, dueDate, completed: false }; // Include 'completed' property
+
+      axios.post('/api/tasks', newTask)
+        .then((response) => {
+          const addedTask = response.data;
+          addTask(addedTask);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
       setTitle('');
       setDescription('');
       setDueDate('');
