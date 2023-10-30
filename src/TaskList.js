@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import TaskItem from './TaskItem'; // Import the TaskItem component
@@ -21,11 +22,10 @@ const TaskList = ({ tasks, editTask, deleteTask, toggleComplete }) => {
       <h2>Task List</h2>
       {fetchedTasks.map((task) => (
         <TaskItem
-          key={task.id}
+          key={task._id}
           task={task}
           editTask={editTask}
           deleteTask={deleteTask}
-          toggleComplete={toggleComplete}
         />
       ))}
     </div>
@@ -33,4 +33,3 @@ const TaskList = ({ tasks, editTask, deleteTask, toggleComplete }) => {
 };
 
 export default TaskList;
-

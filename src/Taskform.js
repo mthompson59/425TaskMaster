@@ -5,27 +5,30 @@ import axios from 'axios'; // Import Axios
 const TaskForm = ({ addTask }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [dueDate, setDueDate] = useState('');
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (title && description && dueDate) {
-      const newTask = { title, description, dueDate, completed: false }; // Include 'completed' property
-
+    if (title && description ) {
+      const newTask = { title, description};
+  
       axios.post('/api/tasks', newTask)
         .then((response) => {
+          // Here, you can access the response data and log it
+          console.log('Response data:', response.data);
+  
           const addedTask = response.data;
           addTask(addedTask);
         })
         .catch((error) => {
           console.error(error);
         });
-
+  
       setTitle('');
       setDescription('');
-      setDueDate('');
     }
   };
+  
 
   return (
     <div className="task-form">
@@ -43,12 +46,7 @@ const TaskForm = ({ addTask }) => {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        <input
-          type="date"
-          placeholder="Due Date"
-          value={dueDate}
-          onChange={(e) => setDueDate(e.target.value)}
-        />
+      
         <button type="submit">Add Task</button>
       </form>
     </div>
