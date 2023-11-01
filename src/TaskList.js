@@ -5,7 +5,7 @@ import TaskItem from './TaskItem'; // Import the TaskItem component
 import './TaskList.css';
 
 const TaskList = ({ tasks, editTask, deleteTask, toggleComplete }) => {
-  const [fetchedTasks, setFetchedTasks] = useState([]); // Use a different variable name
+  const [fetchedTasks, setFetchedTasks] = useState(tasks); // Use a different variable name
 
   useEffect(() => {
     axios.get('/api/tasks')

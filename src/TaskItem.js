@@ -10,28 +10,40 @@ const TaskItem = ({ task, editTask, deleteTask }) => {
     setIsEditing(true);
   };
 
-  const handleSaveClick = () => {
-    axios
-      .patch(`/api/tasks/${task._id}`, editedTask)
-      .then((response) => {
-        const updatedTask = response.data;
-        editTask(task._id, updatedTask);
-        setIsEditing(false);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+const handleSaveClick = () => {
+  // Create a new object based on the server's requirements
+  const updatedData = {
+    // Include only the fields that need to be updated
+    title: editedTask.title,
+    description: editedTask.description,
+    // Add any other required fields
   };
 
+  axios
+    .patch(`/api/tasks/${task._id}`, updatedData)
+    .then((response) => {
+     
+
+      setIsEditing(false);
+    })
+    .catch((error) => {
+      if (error.response) {
+        console.error('Server Error Data:', error.response.data);
+        console.error('Server Error Status:', error.response.status);
+        console.error('Server Error Headers:', error.response.headers);
+      } else {
+        console.error('Error Message:', error.message);
+      }
+    });
+};
+
+
   const handleDeleteClick = () => {
-    console.log('Task ID to delete:', task._id); // Log the task ID
-    const deleteUrl = `/api/tasks/${task._id}`;
-  console.log('Delete URL:', deleteUrl); // Log the URL
     axios
       .delete(`/api/tasks/${task._id}`)
       .then(() => {
         console.log('Deleting task with ID:', task._id);
-        deleteTask(task._id);
+        //deleteTask(task._id);
       })
       .catch((error) => {
         console.error(error);
@@ -77,9 +89,8 @@ const TaskItem = ({ task, editTask, deleteTask }) => {
           </div>
         ) : (
           <div>
-            <button onClick={() => handleDeleteClick(task._id)}>Delete</button>
-            <button onClick={() => handleEditClick(task._id)}>Edit</button>
-          
+            <button onClick={handleDeleteClick}>Delete</button>
+            <button onClick={handleEditClick}>Edit</button>
           </div>
         )}
       </div>

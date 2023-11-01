@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import './Taskform.css';
 import axios from 'axios'; // Import Axios
 
-const TaskForm = ({ addTask }) => {
+
+const TaskForm = ({ addTask,refreshTasks }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   
@@ -17,8 +18,9 @@ const TaskForm = ({ addTask }) => {
           // Here, you can access the response data and log it
           console.log('Response data:', response.data);
   
-          const addedTask = response.data;
-          addTask(addedTask);
+          
+          refreshTasks();
+        
         })
         .catch((error) => {
           console.error(error);
@@ -26,6 +28,8 @@ const TaskForm = ({ addTask }) => {
   
       setTitle('');
       setDescription('');
+      
+      // research how to force an app refresh
     }
   };
   

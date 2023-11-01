@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import TaskForm from './Taskform';
+import TaskForm from './Taskform'; // Corrected import
 import TaskList from './TaskList';
 import './App.css';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:5039'; // Update with your backend server URL
-
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -17,7 +16,6 @@ function App() {
       .then((response) => {
         // Here, you can access the response data and log it
         console.log('Response data:', response.data);
-  
         // Now you can set your tasks state with the response data
         setTasks(response.data);
       })
@@ -25,57 +23,20 @@ function App() {
         console.error(error);
       });
   }, []); // Empty dependency array means this effect runs once on component mount.
-  
-  const addTask = (newTask) => {
-    // Perform the API call to add the task to your database
-    axios.post('/api/tasks', newTask)
-      .then((response) => {
-        // If the API call is successful, update the state with the new task
-        setTasks((prevTasks) => [...prevTasks, response.data]);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-  const editTask = (taskId, updatedTask) => {
-    // Perform the API call to edit the task
-    axios.patch(`/api/tasks/${taskId}`, updatedTask)
-      .then((response) => {
-        // If the API call is successful, you can update the state
-        const updatedTasks = tasks.map((task) =>
-          task._id === taskId ? { ...task, ...response.data } : task
-        );
-        setTasks(updatedTasks);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-  
 
- const deleteTask = (taskId) => {
-  // Perform the API call to delete the task
-  axios.delete(`/api/tasks/${taskId}`)
-    .then(() => {
-      // If the API call is successful, you can update the state
-      const updatedTasks = tasks.filter((task) => task._id !== taskId);
-      setTasks(updatedTasks);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-};
+ 
 
-    // Function to filter tasks based on the current filter
-    const filteredTasks = () => {
-      if (filter === 'All') {
-        return tasks;
-      } else if (filter === 'Completed') {
-        return tasks.filter((task) => task.completed);
-      } else if (filter === 'Incomplete') {
-        return tasks.filter((task) => !task.completed);
-      }
-    };
+
+  // Function to filter tasks based on the current filter
+  const filteredTasks = () => {
+    if (filter === 'All') {
+      return tasks;
+    } else if (filter === 'Completed') {
+      return tasks.filter((task) => task.completed);
+    } else if (filter === 'Incomplete') {
+      return tasks.filter((task) => !task.completed);
+    }
+  };
     // Function to toggle task completion
     const toggleComplete = (taskId) => {
       const updatedTasks = tasks.map((task) =>
@@ -84,7 +45,6 @@ function App() {
       setTasks(updatedTasks);
     };
 
-  // Rest of your component code remains the same.
 
   return (
     <div className="App">
@@ -98,9 +58,8 @@ function App() {
 
       <div className="task-form-container">
         <h1>Task Master Dashboard</h1>
-        <TaskForm addTask={addTask} />
-       
-        <TaskList tasks={tasks} editTask={editTask} deleteTask={deleteTask} />
+        <TaskForm   /> 
+        <TaskList tasks={tasks} />
       </div>
     </div>
   );
