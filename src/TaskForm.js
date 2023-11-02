@@ -6,11 +6,9 @@ import axios from 'axios'; // Import Axios
 const TaskForm = ({ addTask,refreshTasks }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  
-
-  
 
   const handleSubmit = (e) => {
+    
     e.preventDefault();
     if (title && description ) {
       const newTask = { title, description};
@@ -19,15 +17,11 @@ const TaskForm = ({ addTask,refreshTasks }) => {
         .then((response) => {
           // Here, you can access the response data and log it
           console.log('Response data:', response.data);
-  
-          
-          refreshTasks();
-        
         })
         .catch((error) => {
           console.error(error);
         });
-  
+
       setTitle('');
       setDescription('');
       

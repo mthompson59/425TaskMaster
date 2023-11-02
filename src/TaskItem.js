@@ -11,19 +11,16 @@ const TaskItem = ({ task, editTask, deleteTask }) => {
   };
 
 const handleSaveClick = () => {
-  // Create a new object based on the server's requirements
+ 
   const updatedData = {
-    // Include only the fields that need to be updated
+   
     title: editedTask.title,
     description: editedTask.description,
-    // Add any other required fields
   };
 
   axios
     .patch(`/api/tasks/${task._id}`, updatedData)
     .then((response) => {
-     
-
       setIsEditing(false);
     })
     .catch((error) => {
