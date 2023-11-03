@@ -74,6 +74,7 @@ const App = () => {
         />
         <button onClick={handleAddTask}>Add</button>
       </div>
+      <h2>All Tasks</h2>
       <div>
         {tasks.map((task) => (
           <Task key={task.id} task={task} onEdit={handleEditTask} onDelete={handleDeleteTask} />

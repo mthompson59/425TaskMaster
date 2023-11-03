@@ -8,12 +8,10 @@ function App() {
   const [filter, setFilter] = useState('All'); // Initialize the filter state
 
   const addTask = (newTask) => {
-    //add your axios call to your database to add a task here
     setTasks([...tasks, { ...newTask, id: tasks.length + 1 }]);
   };
 
   const editTask = (taskId, updatedTask) => {
-    //add your axios call to your database to edit a task here
     const updatedTasks = tasks.map((task) =>
       task.id === taskId ? { ...task, ...updatedTask } : task
     );
@@ -24,12 +22,6 @@ function App() {
     const updatedTasks = tasks.filter((task) => task.id !== taskId);
     setTasks(updatedTasks);
   };
-
-  //you can add a use effect here to then fire when addTask, editTask, or deleteTask are called. This should refresh your app
-  useEffect(() => {
-    if (addTask, editTask, deleteTask) {
-        window.location.reload(true);}
-    }, []);
 
   // Function to filter tasks based on the current filter
   const filteredTasks = () => {
