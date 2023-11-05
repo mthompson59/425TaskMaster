@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Task from './Task';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:3001';
+import './App.css'; // Import your CSS file
+
+axios.defaults.baseURL = 'http://localhost:5039';
+
 const App = () => {
   const [tasks, setTasks] = useState([]);
-  const [newTask, setNewTask] = useState({ name: '', description: '', date: '' });
+  const [newTask, setNewTask] = useState({ name: '', description: '', date: '', completed: false });
 
   useEffect(() => {
     fetchTasks();
@@ -13,7 +16,7 @@ const App = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get(`/tasks`);
+      const response = await axios.get(`/api/tasks`);
       setTasks(response.data);
     } catch (error) {
       console.error('Error fetching tasks:', error);
@@ -22,9 +25,9 @@ const App = () => {
 
   const handleAddTask = async () => {
     try {
-      const response = await axios.post(`/tasks`, newTask);
+      const response = await axios.post(`/api/tasks`, newTask);
       setTasks([...tasks, response.data]);
-      setNewTask({ name: '', description: '', date: '' });
+      setNewTask({ name: '', description: '', date: '', completed: false });
     } catch (error) {
       console.error('Error adding task:', error);
     }
@@ -32,8 +35,8 @@ const App = () => {
 
   const handleEditTask = async (task) => {
     try {
-      const response = await axios.put(`/tasks/${task.id}`, task);
-      const updatedTasks = tasks.map((t) => (t.id === response.data.id ? response.data : t));
+      const response = await axios.put(`/api/tasks/${task._id}`, task); // Use task._id here
+      const updatedTasks = tasks.map((t) => (t._id === response.data._id ? response.data : t)); // Use t._id
       setTasks(updatedTasks);
     } catch (error) {
       console.error('Error editing task:', error);
@@ -42,8 +45,8 @@ const App = () => {
 
   const handleDeleteTask = async (task) => {
     try {
-      await axios.delete(`/tasks/${task.id}`);
-      const updatedTasks = tasks.filter((t) => t.id !== task.id);
+      await axios.delete(`/api/tasks/${task._id}`);
+      const updatedTasks = tasks.filter((t) => t._id !== task._id);
       setTasks(updatedTasks);
     } catch (error) {
       console.error('Error deleting task:', error);
@@ -51,9 +54,9 @@ const App = () => {
   };
 
   return (
-    <div>
+    <div className="container">
       <h1>Task Manager</h1>
-      <div>
+      <div className="input-container">
         <input
           type="text"
           placeholder="Task Name"

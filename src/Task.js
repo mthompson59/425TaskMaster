@@ -1,5 +1,5 @@
-// src/Task.js
 import React, { useState } from 'react';
+
 
 const Task = ({ task, onEdit, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -11,7 +11,7 @@ const Task = ({ task, onEdit, onDelete }) => {
   };
 
   return (
-    <div>
+    <div className="task-container">
       {isEditing ? (
         <div>
           <input
@@ -29,7 +29,7 @@ const Task = ({ task, onEdit, onDelete }) => {
             value={updatedTask.date}
             onChange={(e) => setUpdatedTask({ ...updatedTask, date: e.target.value })}
           />
-          <label>
+            <label>
             Completed:
             <input
               type="checkbox"
@@ -37,13 +37,13 @@ const Task = ({ task, onEdit, onDelete }) => {
               onChange={(e) => setUpdatedTask({ ...updatedTask, completed: e.target.checked })}
             />
           </label>
-          <button onClick={handleEdit}>Save</button>
+          <button className="edit-button" onClick={handleEdit}>Save</button>
         </div>
       ) : (
         <div>
-          <span>{task.name}</span>
-          <span>{task.description}</span>
-          <span>{task.date}</span>
+          <span><strong>Task Name:</strong> {task.name}</span>
+          <span><strong>Description:</strong> {task.description}</span>
+          <span><strong>Date:</strong> {task.date}</span>
           <span>{task.completed ? 'Completed' : 'Incomplete'}</span>
           <button onClick={() => setIsEditing(true)}>Edit</button>
           <button onClick={() => onDelete(task)}>Delete</button>

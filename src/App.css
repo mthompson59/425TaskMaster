@@ -1,47 +1,103 @@
-/* App.css */
+/* Basic styling for the entire app */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f4f6f9;
+  background-color: #f0f0f0;
   margin: 0;
   padding: 0;
 }
 
-.App {
-  text-align: center;
-  background-color: #fff;
+.container {
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  margin: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
 h1 {
   font-size: 24px;
-  color: #333;
-  margin-bottom: 20px;
+  margin: 0;
+  padding: 10px 0;
 }
 
-nav ul {
-  list-style-type: none;
-  padding: 0;
+/* Styling for the form and input fields */
+.input-container {
   display: flex;
-  justify-content: center;
-  background-color: #007bff;
-  border-radius: 5px;
+  margin: 10px 0;
+}
+
+.input-container input[type="text"],
+.input-container input[type="date"] {
+  width: 100%;
   padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
 }
 
-nav ul li {
-  margin-right: 20px;
-}
-
-nav ul li a {
-  text-decoration: none;
+.input-container button {
+  background-color: #0074d9;
   color: #fff;
-  font-weight: bold;
-  transition: color 0.2s;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  margin-left: 10px;
+  cursor: pointer;
 }
 
-nav ul li a:hover {
-  color: #0056b3;
+/* Styling for task items */
+.task {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.task span {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.task button {
+  background-color: #d9534f;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.task button.edit-button {
+  background-color: #5bc0de;
+}
+
+.task button.delete-button {
+  background-color: #d9534f;
+}
+/* Styling for task items */
+.task-container {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.task-container span {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.task-container button {
+  background-color: #d9534f;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.task-container button.edit-button {
+  background-color: #5bc0de;
 }
