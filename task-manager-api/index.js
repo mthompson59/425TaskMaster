@@ -2,13 +2,18 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const port = 3001; // You can choose a different port
+const cors = require('cors');
 
 app.use(bodyParser.json());
+const corsOptions = {
+  origin: 'http://localhost:3000',
+}
+app.use(cors(corsOptions));
 
 // Sample data to simulate a database
 let tasks = [
-  { id: 1, name: 'Task 1', description: 'Description 1', date: '2023-11-02' },
-  { id: 2, name: 'Task 2', description: 'Description 2', date: '2023-11-03' },
+  { id: 1, name: 'Task 1', description: 'Description 1', date: '2023-11-02' , completed: false},
+  { id: 2, name: 'Task 2', description: 'Description 2', date: '2023-11-03',completed:true },
 ];
 
 // Define your endpoints

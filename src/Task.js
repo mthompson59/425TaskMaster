@@ -29,6 +29,14 @@ const Task = ({ task, onEdit, onDelete }) => {
             value={updatedTask.date}
             onChange={(e) => setUpdatedTask({ ...updatedTask, date: e.target.value })}
           />
+          <label>
+            Completed:
+            <input
+              type="checkbox"
+              checked={updatedTask.completed}
+              onChange={(e) => setUpdatedTask({ ...updatedTask, completed: e.target.checked })}
+            />
+          </label>
           <button onClick={handleEdit}>Save</button>
         </div>
       ) : (
@@ -36,6 +44,7 @@ const Task = ({ task, onEdit, onDelete }) => {
           <span>{task.name}</span>
           <span>{task.description}</span>
           <span>{task.date}</span>
+          <span>{task.completed ? 'Completed' : 'Incomplete'}</span>
           <button onClick={() => setIsEditing(true)}>Edit</button>
           <button onClick={() => onDelete(task)}>Delete</button>
         </div>

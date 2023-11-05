@@ -1,69 +1,86 @@
-import React, { useState } from 'react';
-import TaskForm from './Taskform';
-import TaskList from './TaskList';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import Task from './Task';
+import axios from 'axios';
 
-function App() {
+axios.defaults.baseURL = 'http://localhost:3001';
+const App = () => {
   const [tasks, setTasks] = useState([]);
-  const [filter, setFilter] = useState('All'); // Initialize the filter state
+  const [newTask, setNewTask] = useState({ name: '', description: '', date: '' });
 
-  const addTask = (newTask) => {
-    setTasks([...tasks, { ...newTask, id: tasks.length + 1 }]);
-  };
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
-  const editTask = (taskId, updatedTask) => {
-    const updatedTasks = tasks.map((task) =>
-      task.id === taskId ? { ...task, ...updatedTask } : task
-    );
-    setTasks(updatedTasks);
-  };
-
-  const deleteTask = (taskId) => {
-    const updatedTasks = tasks.filter((task) => task.id !== taskId);
-    setTasks(updatedTasks);
-  };
-
-  // Function to filter tasks based on the current filter
-  const filteredTasks = () => {
-    if (filter === 'All') {
-      return tasks;
-    } else if (filter === 'Completed') {
-      return tasks.filter((task) => task.completed);
-    } else if (filter === 'Incomplete') {
-      return tasks.filter((task) => !task.completed);
+  const fetchTasks = async () => {
+    try {
+      const response = await axios.get(`/tasks`);
+      setTasks(response.data);
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
     }
   };
 
-  // Function to toggle task completion
-  const toggleComplete = (taskId) => {
-    const updatedTasks = tasks.map((task) =>
-      task.id === taskId ? { ...task, completed: !task.completed } : task
-    );
-    setTasks(updatedTasks);
+  const handleAddTask = async () => {
+    try {
+      const response = await axios.post(`/tasks`, newTask);
+      setTasks([...tasks, response.data]);
+      setNewTask({ name: '', description: '', date: '' });
+    } catch (error) {
+      console.error('Error adding task:', error);
+    }
+  };
+
+  const handleEditTask = async (task) => {
+    try {
+      const response = await axios.put(`/tasks/${task.id}`, task);
+      const updatedTasks = tasks.map((t) => (t.id === response.data.id ? response.data : t));
+      setTasks(updatedTasks);
+    } catch (error) {
+      console.error('Error editing task:', error);
+    }
+  };
+
+  const handleDeleteTask = async (task) => {
+    try {
+      await axios.delete(`/tasks/${task.id}`);
+      const updatedTasks = tasks.filter((t) => t.id !== task.id);
+      setTasks(updatedTasks);
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
   };
 
   return (
-    <div className="App">
-      <nav>
-        <ul>
-          <li>
-            <a href="/">TaskMaster Home</a>
-          </li>
-        </ul>
-      </nav>
-
-      <div className="task-form-container">
-        <h1>Task Master Dashboard</h1>
-        <TaskForm addTask={addTask} />
-        <div>
-          <button onClick={() => setFilter('All')}>All Tasks</button>
-          <button onClick={() => setFilter('Completed')}>Completed</button>
-          <button onClick={() => setFilter('Incomplete')}>Incomplete</button>
-        </div>
-        <TaskList tasks={filteredTasks()} editTask={editTask} deleteTask={deleteTask} toggleComplete={toggleComplete} />
+    <div>
+      <h1>Task Manager</h1>
+      <div>
+        <input
+          type="text"
+          placeholder="Task Name"
+          value={newTask.name}
+          onChange={(e) => setNewTask({ ...newTask, name: e.target.value })}
+        />
+        <input
+          type="text"
+          placeholder="Task Description"
+          value={newTask.description}
+          onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
+        />
+        <input
+          type="date"
+          value={newTask.date}
+          onChange={(e) => setNewTask({ ...newTask, date: e.target.value })}
+        />
+        <button onClick={handleAddTask}>Add</button>
+      </div>
+      <h2>All Tasks</h2>
+      <div>
+        {tasks.map((task) => (
+          <Task key={task.id} task={task} onEdit={handleEditTask} onDelete={handleDeleteTask} />
+        ))}
       </div>
     </div>
   );
-}
+};
 
 export default App;
