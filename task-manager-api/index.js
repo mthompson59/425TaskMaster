@@ -1,51 +1,34 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const app = express();
-const port = 3001; // You can choose a different port
 const cors = require('cors');
+const taskRoutes = require('./routes/tasks');
 
+
+
+const app = express();
+const port = 5039; 
+
+const CONNECTION_STRING = "mongodb+srv://admin:admin@cluster0.uxjzqe0.mongodb.net/?retryWrites=true&w=majority";
+
+mongoose.connect(CONNECTION_STRING, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+// Middleware setup
 app.use(bodyParser.json());
 const corsOptions = {
-  origin: 'http://localhost:3000',
-}
+  origin: 'http://localhost:3000', // Allow requests from the localhost where your frontend is hosted
+  optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
 app.use(cors(corsOptions));
 
-// Sample data to simulate a database
-let tasks = [
-  { id: 1, name: 'Task 1', description: 'Description 1', date: '2023-11-02' , completed: false},
-  { id: 2, name: 'Task 2', description: 'Description 2', date: '2023-11-03',completed:true },
-];
+// Use task routes
+app.use('/api', taskRoutes);
 
-// Define your endpoints
-
-// Get all tasks
-app.get('/tasks', (req, res) => {
-  res.json(tasks);
-});
-
-// Create a new task
-app.post('/tasks', (req, res) => {
-  const newTask = req.body;
-  newTask.id = tasks.length + 1;
-  tasks.push(newTask);
-  res.status(201).json(newTask);
-});
-
-// Update a task by ID
-app.put('/tasks/:id', (req, res) => {
-  const taskId = parseInt(req.params.id);
-  const updatedTask = req.body;
-  tasks = tasks.map((task) => (task.id === taskId ? { ...task, ...updatedTask } : task));
-  res.json(updatedTask);
-});
-
-// Delete a task by ID
-app.delete('/tasks/:id', (req, res) => {
-  const taskId = parseInt(req.params.id);
-  tasks = tasks.filter((task) => task.id !== taskId);
-  res.sendStatus(204);
-});
-
+// Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
