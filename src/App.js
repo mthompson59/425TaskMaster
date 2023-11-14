@@ -10,10 +10,11 @@ const App = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState({ name: '', description: '', date: '', completed: false });
   const [errorMessage, setErrorMessage] = useState(null);
+  const [filterOption, setFilterOption] = useState('all'); // 'all', 'completed', or 'incomplete'
 
   useEffect(() => {
     fetchTasks();
-  }, []);
+  }, [filterOption]); // Refetch tasks when the filter option changes
 
   const fetchTasks = async () => {
     try {
@@ -22,7 +23,15 @@ const App = () => {
         ...task,
         date: new Date(task.date).toLocaleDateString('en-US'),
       }));
-      setTasks(formattedTasks);
+
+      // Filter tasks based on the selected option
+      const filteredTasks = filterOption === 'completed'
+        ? formattedTasks.filter(task => task.completed)
+        : filterOption === 'incomplete'
+          ? formattedTasks.filter(task => !task.completed)
+          : formattedTasks;
+
+      setTasks(filteredTasks);
     } catch (error) {
       console.error('Error fetching tasks:', error);
       setErrorMessage('An error occurred while fetching tasks');
@@ -52,19 +61,20 @@ const App = () => {
       setErrorMessage('An error occurred while adding the task');
     }
   };
+
   const handleEditTask = async (task) => {
     try {
       const currentDate = new Date();
-      const editedDate = new Date(task.date + 'T10:10:00Z'); // Adjusting to UTC
-  
+      const editedDate = new Date(task.date + 'T10:00:00Z');
+
       // Check if the edited date is in the future
       if (editedDate < currentDate) {
         setErrorMessage("You can't enter a date in the past");
         return;
       }
-  
+
       // When editing, include the date field
-      const response = await axios.put(`/api/tasks/${task._id}`, { ...task, date: editedDate.toISOString() });
+      const response = await axios.put(`/api/tasks/${task._id}`, task);
       const updatedTasks = tasks.map((t) => (t._id === response.data._id ? { ...response.data, date: new Date(response.data.date).toLocaleDateString('en-US') } : t));
       setTasks(updatedTasks);
     } catch (error) {
@@ -72,8 +82,6 @@ const App = () => {
       setErrorMessage('An error occurred while editing the task');
     }
   };
-  
-
 
   const handleDeleteTask = async (task) => {
     try {
@@ -121,6 +129,11 @@ const App = () => {
         <button onClick={handleAddTask}>Add</button>
         <button onClick={() => handleSortByDate(true)}>Sort by Closest Date</button>
         <button onClick={() => handleSortByDate(false)}>Sort by Furthest Date</button>
+        <select value={filterOption} onChange={(e) => setFilterOption(e.target.value)}>
+          <option value="all">All Tasks</option>
+          <option value="completed">Completed Tasks</option>
+          <option value="incomplete">Incomplete Tasks</option>
+        </select>
       </div>
       <h2>All Tasks</h2>
       <div>
