@@ -52,18 +52,18 @@ const App = () => {
       setErrorMessage('An error occurred while adding the task');
     }
   };
-
   const handleEditTask = async (task) => {
     try {
       const currentDate = new Date();
-      const editedDate = new Date(task.date + 'T10:00:00Z');
-
+      const editedDate = new Date(task.date + 'T10:10:00Z'); // Adjusting to UTC
+  
       // Check if the edited date is in the future
       if (editedDate < currentDate) {
         setErrorMessage("You can't enter a date in the past");
         return;
       }
-
+  
+      // When editing, include the date field
       const response = await axios.put(`/api/tasks/${task._id}`, { ...task, date: editedDate.toISOString() });
       const updatedTasks = tasks.map((t) => (t._id === response.data._id ? { ...response.data, date: new Date(response.data.date).toLocaleDateString('en-US') } : t));
       setTasks(updatedTasks);
@@ -72,6 +72,8 @@ const App = () => {
       setErrorMessage('An error occurred while editing the task');
     }
   };
+  
+
 
   const handleDeleteTask = async (task) => {
     try {
@@ -82,6 +84,16 @@ const App = () => {
       console.error('Error deleting task:', error);
       setErrorMessage('An error occurred while deleting the task');
     }
+  };
+
+  const handleSortByDate = (ascending) => {
+    const sortedTasks = [...tasks].sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return ascending ? dateA - dateB : dateB - dateA;
+    });
+
+    setTasks(sortedTasks);
   };
 
   return (
@@ -107,6 +119,8 @@ const App = () => {
           onChange={(e) => setNewTask({ ...newTask, date: e.target.value })}
         />
         <button onClick={handleAddTask}>Add</button>
+        <button onClick={() => handleSortByDate(true)}>Sort by Closest Date</button>
+        <button onClick={() => handleSortByDate(false)}>Sort by Furthest Date</button>
       </div>
       <h2>All Tasks</h2>
       <div>

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 const Task = ({ task, onEdit, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [updatedTask, setUpdatedTask] = useState(task);
+  const [updatedTask, setUpdatedTask] = useState({ ...task }); // Copy the task when editing
 
   const handleEdit = () => {
     onEdit(updatedTask);
@@ -29,7 +29,7 @@ const Task = ({ task, onEdit, onDelete }) => {
             value={updatedTask.date}
             onChange={(e) => setUpdatedTask({ ...updatedTask, date: e.target.value })}
           />
-            <label>
+          <label>
             Completed:
             <input
               type="checkbox"
@@ -37,7 +37,9 @@ const Task = ({ task, onEdit, onDelete }) => {
               onChange={(e) => setUpdatedTask({ ...updatedTask, completed: e.target.checked })}
             />
           </label>
-          <button className="edit-button" onClick={handleEdit}>Save</button>
+          <button className="edit-button" onClick={handleEdit}>
+            Save
+          </button>
         </div>
       ) : (
         <div>
