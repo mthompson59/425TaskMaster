@@ -10,11 +10,12 @@ const App = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState({ name: '', description: '', date: '', completed: false });
   const [errorMessage, setErrorMessage] = useState(null);
-  const [filterOption, setFilterOption] = useState('all'); // 'all', 'completed', or 'incomplete'
+  const [completedFilter, setCompletedFilter] = useState('all'); // 'all', 'completed', or 'incomplete'
+  const [dateFilter, setDateFilter] = useState('all'); // 'all', 'closest', or 'furthest'
 
   useEffect(() => {
     fetchTasks();
-  }, [filterOption]); // Refetch tasks when the filter option changes
+  }, [completedFilter, dateFilter]); // Refetch tasks when the filter options change
 
   const fetchTasks = async () => {
     try {
@@ -24,20 +25,33 @@ const App = () => {
         date: new Date(task.date).toLocaleDateString('en-US'),
       }));
 
-      // Filter tasks based on the selected option
-      const filteredTasks = filterOption === 'completed'
+      // Filter tasks based on the completed filter
+      const filteredTasks = completedFilter === 'completed'
         ? formattedTasks.filter(task => task.completed)
-        : filterOption === 'incomplete'
+        : completedFilter === 'incomplete'
           ? formattedTasks.filter(task => !task.completed)
           : formattedTasks;
 
-      setTasks(filteredTasks);
+      // Sort tasks based on the date filter
+      const sortedTasks = filteredTasks.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+
+        if (dateFilter === 'closest') {
+          return dateA - dateB;
+        } else if (dateFilter === 'furthest') {
+          return dateB - dateA;
+        }
+
+        return 0; // 'all' option
+      });
+
+      setTasks(sortedTasks);
     } catch (error) {
       console.error('Error fetching tasks:', error);
       setErrorMessage('An error occurred while fetching tasks');
     }
   };
-
   const handleAddTask = async () => {
     try {
       const currentDate = new Date();
@@ -127,13 +141,24 @@ const App = () => {
           onChange={(e) => setNewTask({ ...newTask, date: e.target.value })}
         />
         <button onClick={handleAddTask}>Add</button>
-        <button onClick={() => handleSortByDate(true)}>Sort by Closest Date</button>
-        <button onClick={() => handleSortByDate(false)}>Sort by Furthest Date</button>
-        <select value={filterOption} onChange={(e) => setFilterOption(e.target.value)}>
-          <option value="all">All Tasks</option>
-          <option value="completed">Completed Tasks</option>
-          <option value="incomplete">Incomplete Tasks</option>
-        </select>
+      </div>
+      <div className="filter-container">
+        <label>
+          Completed:
+          <select value={completedFilter} onChange={(e) => setCompletedFilter(e.target.value)}>
+            <option value="all">All</option>
+            <option value="completed">Completed</option>
+            <option value="incomplete">Incomplete</option>
+          </select>
+        </label>
+        <label>
+          Date:
+          <select value={dateFilter} onChange={(e) => setDateFilter(e.target.value)}>
+            <option value="all">All</option>
+            <option value="closest">Closest</option>
+            <option value="furthest">Furthest</option>
+          </select>
+        </label>
       </div>
       <h2>All Tasks</h2>
       <div>
