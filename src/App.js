@@ -9,6 +9,7 @@ axios.defaults.baseURL = 'http://localhost:5039';
 const App = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState({ name: '', description: '', date: '', completed: false });
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     fetchTasks();
@@ -17,29 +18,58 @@ const App = () => {
   const fetchTasks = async () => {
     try {
       const response = await axios.get(`/api/tasks`);
-      setTasks(response.data);
+      const formattedTasks = response.data.map(task => ({
+        ...task,
+        date: new Date(task.date).toLocaleDateString('en-US'),
+      }));
+      setTasks(formattedTasks);
     } catch (error) {
       console.error('Error fetching tasks:', error);
+      setErrorMessage('An error occurred while fetching tasks');
     }
   };
 
   const handleAddTask = async () => {
     try {
-      const response = await axios.post(`/api/tasks`, newTask);
-      setTasks([...tasks, response.data]);
+      const currentDate = new Date();
+      const selectedDate = new Date(newTask.date + 'T10:00:00Z');
+
+      // Check if the selected date is in the future
+      if (selectedDate < currentDate) {
+        setErrorMessage("You can't enter a date in the past");
+        return;
+      }
+
+      const response = await axios.post(`/api/tasks`, {
+        ...newTask,
+        date: selectedDate.toISOString(),
+      });
+
+      setTasks([...tasks, { ...response.data, date: new Date(response.data.date).toLocaleDateString('en-US') }]);
       setNewTask({ name: '', description: '', date: '', completed: false });
     } catch (error) {
       console.error('Error adding task:', error);
+      setErrorMessage('An error occurred while adding the task');
     }
   };
 
   const handleEditTask = async (task) => {
     try {
-      const response = await axios.put(`/api/tasks/${task._id}`, task); // Use task._id here
-      const updatedTasks = tasks.map((t) => (t._id === response.data._id ? response.data : t)); // Use t._id
+      const currentDate = new Date();
+      const editedDate = new Date(task.date + 'T10:00:00Z');
+
+      // Check if the edited date is in the future
+      if (editedDate < currentDate) {
+        setErrorMessage("You can't enter a date in the past");
+        return;
+      }
+
+      const response = await axios.put(`/api/tasks/${task._id}`, { ...task, date: editedDate.toISOString() });
+      const updatedTasks = tasks.map((t) => (t._id === response.data._id ? { ...response.data, date: new Date(response.data.date).toLocaleDateString('en-US') } : t));
       setTasks(updatedTasks);
     } catch (error) {
       console.error('Error editing task:', error);
+      setErrorMessage('An error occurred while editing the task');
     }
   };
 
@@ -50,12 +80,14 @@ const App = () => {
       setTasks(updatedTasks);
     } catch (error) {
       console.error('Error deleting task:', error);
+      setErrorMessage('An error occurred while deleting the task');
     }
   };
 
   return (
     <div className="container">
       <h1>Task Manager</h1>
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
       <div className="input-container">
         <input
           type="text"
@@ -79,7 +111,7 @@ const App = () => {
       <h2>All Tasks</h2>
       <div>
         {tasks.map((task) => (
-          <Task key={task.id} task={task} onEdit={handleEditTask} onDelete={handleDeleteTask} />
+          <Task key={task._id} task={task} onEdit={handleEditTask} onDelete={handleDeleteTask} />
         ))}
       </div>
     </div>
