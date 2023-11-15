@@ -1,4 +1,4 @@
-/* Basic styling for the entire app */
+A/* Basic styling for the entire app */
 body {
   font-family: Arial, sans-serif;
   background-color: #f0f0f0;
@@ -100,4 +100,29 @@ h1 {
 
 .task-container button.edit-button {
   background-color: #5bc0de;
+}
+
+/* ... (previous styles) */
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.all-tasks-heading {
+  margin: 0;
+}
+
+.filters-container,
+.sort-container {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.filters-container label,
+.sort-container label {
+  margin-right: 5px;
 }
