@@ -94,12 +94,9 @@ const App = () => {
   const handleEditTask = async (task) => {
     try {
       const currentDate = new Date();
-      const editedDate = new Date(task.date + 'T10:00:00'); // Don't use 'Z' for UTC
+      const editedDate = new Date(task.date);
   
-      // Adjust the date with the local time zone offset
-      editedDate.setMinutes(editedDate.getMinutes() - editedDate.getTimezoneOffset());
-  
-      // Check if the edited date is in the past
+      // Check if the edited date is in the future
       if (editedDate < currentDate) {
         setErrorMessage("You can't enter a date in the past");
         return;
@@ -111,22 +108,14 @@ const App = () => {
         date: editedDate.toISOString(),
       });
   
-      const updatedTasks = tasks.map((t) =>
-        t._id === response.data._id
-          ? {
-              ...response.data,
-              date: new Date(response.data.date).toLocaleDateString('en-US', {
-                timeZone: 'UTC', // Adjust the time zone as needed
-              }),
-            }
-          : t
-      );
+      const updatedTasks = tasks.map((t) => (t._id === response.data._id ? { ...response.data, date: new Date(response.data.date).toLocaleDateString('en-US') } : t));
       setTasks(updatedTasks);
     } catch (error) {
       console.error('Error editing task:', error);
       setErrorMessage('An error occurred while editing the task');
     }
   };
+  
   
   
 
