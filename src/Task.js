@@ -1,51 +1,30 @@
+// Task.js
 import React, { useState } from 'react';
-
+import EditTaskModal from './EditTaskModal';
 
 const Task = ({ task, onEdit, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [updatedTask, setUpdatedTask] = useState({ ...task }); // Copy the task when editing
+  const [editedTask, setEditedTask] = useState({ ...task });
 
   const handleEdit = () => {
-    onEdit(updatedTask);
+    onEdit(editedTask);
     setIsEditing(false);
   };
 
   return (
     <div className="task-container">
       {isEditing ? (
-        <div>
-          <input
-            type="text"
-            value={updatedTask.name}
-            onChange={(e) => setUpdatedTask({ ...updatedTask, name: e.target.value })}
-          />
-          <input
-            type="text"
-            value={updatedTask.description}
-            onChange={(e) => setUpdatedTask({ ...updatedTask, description: e.target.value })}
-          />
-          <input
-            type="date"
-            value={updatedTask.date}
-            onChange={(e) => setUpdatedTask({ ...updatedTask, date: e.target.value })}
-          />
-          <label>
-            Completed:
-            <input
-              type="checkbox"
-              checked={updatedTask.completed}
-              onChange={(e) => setUpdatedTask({ ...updatedTask, completed: e.target.checked })}
-            />
-          </label>
-          <button className="edit-button" onClick={handleEdit}>
-            Save
-          </button>
-        </div>
+        <EditTaskModal
+          onClose={() => setIsEditing(false)}
+          onSave={() => onEdit(editedTask)}
+          editedTask={editedTask}
+          onInputChange={(e) => setEditedTask({ ...editedTask, [e.target.name]: e.target.value })}
+        />
       ) : (
-        <div>
+        <div className="task">
           <span><strong>Task Name:</strong> {task.name}</span>
           <span><strong>Description:</strong> {task.description}</span>
-          <span><strong>Date:</strong> {task.date}</span>
+          <span><strong>Date:</strong> {new Date(task.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</span>
           <span>{task.completed ? 'Completed' : 'Incomplete'}</span>
           <button onClick={() => setIsEditing(true)}>Edit</button>
           <button onClick={() => onDelete(task)}>Delete</button>

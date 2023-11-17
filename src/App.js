@@ -25,7 +25,7 @@ const App = () => {
       const response = await axios.get(`/api/tasks`);
       const formattedTasks = response.data.map((task) => ({
         ...task,
-        date: new Date(task.date).toLocaleDateString('en-US'),
+        date: new Date(task.date).toISOString(), // Convert to UTC ISO string
       }));
 
       const filteredTasks =
@@ -59,27 +59,25 @@ const App = () => {
     try {
       const currentDate = new Date();
       const selectedDate = new Date(newTask.date + 'T10:00:00'); // Don't use 'Z' for UTC
-  
+
       // Adjust the date with the local time zone offset
       selectedDate.setMinutes(selectedDate.getMinutes() - selectedDate.getTimezoneOffset());
-  
+
       if (selectedDate < currentDate) {
         setErrorMessage("You can't enter a date in the past");
         return;
       }
-  
+
       const response = await axios.post(`/api/tasks`, {
         ...newTask,
         date: selectedDate.toISOString(),
       });
-  
+
       setTasks([
         ...tasks,
         {
           ...response.data,
-          date: new Date(response.data.date).toLocaleDateString('en-US', {
-            timeZone: 'UTC', // Adjust the time zone as needed
-          }),
+          date: new Date(response.data.date).toISOString(), // Convert to UTC ISO string
         },
       ]);
       setNewTask({ name: '', description: '', date: '', completed: false });
@@ -89,35 +87,38 @@ const App = () => {
       setErrorMessage('An error occurred while adding the task');
     }
   };
-  
 
   const handleEditTask = async (task) => {
     try {
       const currentDate = new Date();
       const editedDate = new Date(task.date);
-  
+
       // Check if the edited date is in the future
       if (editedDate < currentDate) {
         setErrorMessage("You can't enter a date in the past");
         return;
       }
-  
+
       // When editing, include the date field
       const response = await axios.put(`/api/tasks/${task._id}`, {
         ...task,
         date: editedDate.toISOString(),
       });
-  
-      const updatedTasks = tasks.map((t) => (t._id === response.data._id ? { ...response.data, date: new Date(response.data.date).toLocaleDateString('en-US') } : t));
+
+      const updatedTasks = tasks.map((t) =>
+        t._id === response.data._id
+          ? {
+              ...response.data,
+              date: new Date(response.data.date).toISOString(), // Convert to UTC ISO string
+            }
+          : t
+      );
       setTasks(updatedTasks);
     } catch (error) {
       console.error('Error editing task:', error);
       setErrorMessage('An error occurred while editing the task');
     }
   };
-  
-  
-  
 
   const handleDeleteTask = async (task) => {
     try {
@@ -140,54 +141,49 @@ const App = () => {
     setTasks(sortedTasks);
   };
 
-
   const handleToggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-
-return (
-  <div className="App">
-    <Navbar onAddClick={handleToggleModal} />
-    <div className="container">
-      {errorMessage && <div className="error-message">{errorMessage}</div>}
-      <div className="header-container">
-        <h2 className="all-tasks-heading">All Tasks</h2>
-        <div className="filters-container">
-          <label>Status:</label>
-          <select value={completedFilter} onChange={(e) => setCompletedFilter(e.target.value)}>
-            <option value="all">All</option>
-            <option value="completed">Completed</option>
-            <option value="incomplete">Incomplete</option>
-          </select>
-          <label>Date:</label>
-          <select value={dateFilter} onChange={(e) => setDateFilter(e.target.value)}>
-            <option value="all">All</option>
-            <option value="closest">Closest</option>
-            <option value="furthest">Furthest</option>
-          </select>
+  return (
+    <div className="App">
+      <Navbar onAddClick={handleToggleModal} />
+      <div className="container">
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
+        <div className="header-container">
+          <h2 className="all-tasks-heading">All Tasks</h2>
+          <div className="filters-container">
+            <label>Status:</label>
+            <select value={completedFilter} onChange={(e) => setCompletedFilter(e.target.value)}>
+              <option value="all">All</option>
+              <option value="completed">Completed</option>
+              <option value="incomplete">Incomplete</option>
+            </select>
+            <label>Date:</label>
+            <select value={dateFilter} onChange={(e) => setDateFilter(e.target.value)}>
+              <option value="all">All</option>
+              <option value="closest">Closest</option>
+              <option value="furthest">Furthest</option>
+            </select>
+          </div>
         </div>
+        <div>
+          {tasks.map((task) => (
+            <Task key={task._id} task={task} onEdit={handleEditTask} onDelete={handleDeleteTask} />
+          ))}
+        </div>
+        {/* Modal */}
+        {isModalOpen && (
+          <TaskFormModal
+            onClose={handleToggleModal}
+            onSave={handleAddTask}
+            newTask={newTask}
+            onInputChange={(e) => setNewTask({ ...newTask, [e.target.name]: e.target.value })}
+          />
+        )}
       </div>
-      <div>
-        {tasks.map((task) => (
-          <Task key={task._id} task={task} onEdit={handleEditTask} onDelete={handleDeleteTask} />
-        ))}
-      </div>
-      {/* Modal */}
-      {isModalOpen && (
-        <TaskFormModal
-          onClose={handleToggleModal}
-          onSave={handleAddTask}
-          newTask={newTask}
-          onInputChange={(e) => setNewTask({ ...newTask, [e.target.name]: e.target.value })}
-        />
-      )}
     </div>
-  </div>
-);
-
-
-
+  );
 };
 
 export default App;
