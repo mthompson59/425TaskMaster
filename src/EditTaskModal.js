@@ -26,11 +26,6 @@ const EditTaskModal = ({ onClose, onSave, editedTask, onInputChange }) => {
           onChange={onInputChange}
         />
         <input type="date" name="date" value={formatTaskDate(editedTask.date)} onChange={onInputChange} />
-        {/* Add checkbox for completion status */}
-        <label>
-          <input type="checkbox" name="completed" checked={editedTask.completed} onChange={onInputChange} />
-          Completed
-        </label>
         {/* Add more form fields as needed */}
         <button onClick={handleSave}>Save Changes</button>
         <button className="close-button" onClick={onClose}>
