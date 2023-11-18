@@ -126,3 +126,13 @@ h1 {
 .sort-container label {
   margin-right: 5px;
 }
+
+/* Add these styles to your existing App.css or create a new CSS file */
+
+.task {
+  word-wrap: break-word;
+}
+
+.task-container {
+  word-wrap: break-word;
+}

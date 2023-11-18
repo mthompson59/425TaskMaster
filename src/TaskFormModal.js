@@ -6,7 +6,6 @@ const TaskFormModal = ({ onClose, onSave, newTask, onInputChange }) => {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        {/* Form fields for adding a new task */}
         <input type="text" name="name" placeholder="Task Name" value={newTask.name} onChange={onInputChange} />
         <textarea
           className="task-description"
@@ -16,7 +15,6 @@ const TaskFormModal = ({ onClose, onSave, newTask, onInputChange }) => {
           onChange={onInputChange}
         />
         <input type="date" name="date" value={newTask.date} onChange={onInputChange} />
-        {/* Add more form fields as needed */}
         <button onClick={onSave}>Save</button>
         <button className="close-button" onClick={onClose}>
           Close

@@ -1,3 +1,4 @@
+// Task.js
 import React, { useState } from 'react';
 import EditTaskModal from './EditTaskModal';
 
@@ -11,9 +12,7 @@ const Task = ({ task, onEdit, onDelete }) => {
   };
 
   const handleCheckboxChange = () => {
-    // Toggle completion status
     setEditedTask({ ...editedTask, completed: !editedTask.completed });
-    // Immediately update the completion status on the server
     onEdit({ ...editedTask, completed: !editedTask.completed });
   };
 
@@ -29,17 +28,15 @@ const Task = ({ task, onEdit, onDelete }) => {
       ) : (
         <div className="task">
           <div>
-            {/* Move the checkbox down to the same line as the completion status */}
             <input
               type="checkbox"
               checked={task.completed}
               onChange={handleCheckboxChange}
             />
-            {/* Display the completion status to the right of the checkbox */}
             <span>{task.completed ? 'Completed' : 'Incomplete'}</span>
           </div>
-          <span><strong>Task Name:</strong> {task.name}</span>
-          <span><strong>Description:</strong> {task.description}</span>
+          <span className="task-name"><strong>Task Name:</strong> {task.name}</span>
+          <span className="task-description"><strong>Description:</strong> {task.description}</span>
           <span><strong>Date:</strong> {new Date(task.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</span>
           <button onClick={() => setIsEditing(true)}>Edit</button>
           <button onClick={() => onDelete(task)}>Delete</button>

@@ -7,7 +7,6 @@ const Navbar = ({ onAddClick }) => {
     <div className="navbar">
       <h1>Fortnite TODO List</h1>
       <div className="navbar-buttons">
-        {/* Add any other navigation items or links here */}
         <button className="add-button" onClick={onAddClick}>
           Add
         </button>

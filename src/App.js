@@ -25,7 +25,7 @@ const App = () => {
       const response = await axios.get(`/api/tasks`);
       const formattedTasks = response.data.map((task) => ({
         ...task,
-        date: new Date(task.date).toISOString(), // Convert to UTC ISO string
+        date: new Date(task.date).toISOString(),
       }));
 
       const filteredTasks =
@@ -58,9 +58,8 @@ const App = () => {
   const handleAddTask = async () => {
     try {
       const currentDate = new Date();
-      const selectedDate = new Date(newTask.date + 'T10:00:00'); // Don't use 'Z' for UTC
+      const selectedDate = new Date(newTask.date + 'T10:00:00');
 
-      // Adjust the date with the local time zone offset
       selectedDate.setMinutes(selectedDate.getMinutes() - selectedDate.getTimezoneOffset());
 
       if (selectedDate < currentDate) {
@@ -77,11 +76,11 @@ const App = () => {
         ...tasks,
         {
           ...response.data,
-          date: new Date(response.data.date).toISOString(), // Convert to UTC ISO string
+          date: new Date(response.data.date).toISOString(),
         },
       ]);
       setNewTask({ name: '', description: '', date: '', completed: false });
-      setIsModalOpen(false); // Close the modal after adding a task
+      setIsModalOpen(false);
     } catch (error) {
       console.error('Error adding task:', error);
       setErrorMessage('An error occurred while adding the task');
@@ -93,13 +92,11 @@ const App = () => {
       const currentDate = new Date();
       const editedDate = new Date(task.date);
 
-      // Check if the edited date is in the future
       if (editedDate < currentDate) {
         setErrorMessage("You can't enter a date in the past");
         return;
       }
 
-      // When editing, include the date field
       const response = await axios.put(`/api/tasks/${task._id}`, {
         ...task,
         date: editedDate.toISOString(),
@@ -109,7 +106,7 @@ const App = () => {
         t._id === response.data._id
           ? {
               ...response.data,
-              date: new Date(response.data.date).toISOString(), // Convert to UTC ISO string
+              date: new Date(response.data.date).toISOString(),
             }
           : t
       );
@@ -172,7 +169,6 @@ const App = () => {
             <Task key={task._id} task={task} onEdit={handleEditTask} onDelete={handleDeleteTask} />
           ))}
         </div>
-        {/* Modal */}
         {isModalOpen && (
           <TaskFormModal
             onClose={handleToggleModal}
