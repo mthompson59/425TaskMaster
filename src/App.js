@@ -57,8 +57,8 @@ const App = () => {
 
   const handleAddTask = async () => {
     try {
-      const currentDate = new Date();
-      const selectedDate = new Date(newTask.date + 'T10:00:00');
+      const currentDate = new Date() -'T10:00:00' ;
+      const selectedDate = new Date(newTask.date + 'T00:00:00');
 
       selectedDate.setMinutes(selectedDate.getMinutes() - selectedDate.getTimezoneOffset());
 
@@ -89,8 +89,8 @@ const App = () => {
 
   const handleEditTask = async (task) => {
     try {
-      const currentDate = new Date();
-      const editedDate = new Date(task.date);
+      const currentDate = new Date() -'T10:00:00' ;
+      const editedDate = new Date(task.date  );
 
       if (editedDate < currentDate) {
         setErrorMessage("You can't enter a date in the past");
