@@ -14,7 +14,8 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [completedFilter, setCompletedFilter] = useState('all');
   const [dateFilter, setDateFilter] = useState('all');
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false); const today = new Date();
+
 
   useEffect(() => {
     fetchTasks();
@@ -97,17 +98,20 @@ const App = () => {
   const handleEditTask = async (task) => {
     try {
       const currentDate = new Date();
-      const editedDate = new Date(task.date);
+      const checkDate = new Date(task.date);
+      let editedDate = new Date(task.date);
       
   
-      currentDate.setDate(currentDate.getDate() - 1);
+      currentDate.setDate(currentDate.getDate()-1);
       currentDate.setHours(0, 0, 0, 0);
+      checkDate.setDate(editedDate.getDate() );
+      checkDate.setHours(0,0,0,0)
   
       console.log('Current Date:', currentDate);
-      console.log('Selected Date:', editedDate);
+      console.log('Selected Date:', checkDate);
   
       
-        if (editedDate < currentDate) {
+        if (checkDate < currentDate) {
           setErrorMessage("You can't enter a date in the past");
           return;
         }
@@ -157,7 +161,16 @@ const App = () => {
   };
 
   const handleToggleModal = () => {
+    const today = new Date();
+    const defaultDate = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+  
     setIsModalOpen(!isModalOpen);
+    setNewTask({
+      name: '',
+      description: '',
+      date: defaultDate,
+      completed: false,
+    });
   };
 
   return (

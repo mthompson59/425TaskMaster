@@ -26,7 +26,7 @@ const EditTaskModal = ({ onClose, onSave, editedTask, onInputChange }) => {
           onChange={onInputChange}
         />
         <input type="date" name="date" value={formatTaskDate(editedTask.date)} onChange={onInputChange} />
-        <button className="savechangesbutton" onClick={handleSave}>Save Changes</button>
+        <button className="savechangesbutton" onClick={handleSave}>Save</button>
         <button className="closeeditbutton" onClick={onClose}>
           Close
         </button>
