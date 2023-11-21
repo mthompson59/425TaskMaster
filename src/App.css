@@ -1,16 +1,19 @@
-A/* Basic styling for the entire app */
-body {
+/* Basic styling for the entire app */
+html {background-color: #0ac6bf}
+
+.App {
   font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
+  background-color: #0ac6bf;
   margin: 0;
   padding: 0;
 }
 
 .container {
-  max-width: 800px;
+  border-radius: 20px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #fff;
+  background-color: #0ac6bf;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
@@ -24,6 +27,10 @@ h1 {
 .input-container {
   display: flex;
   margin: 10px 0;
+}
+
+.task-container{
+  border-radius: 20px;
 }
 
 .input-container input[type="text"],
