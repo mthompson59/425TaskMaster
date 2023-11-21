@@ -1,6 +1,7 @@
 // EditTaskModal.js
 import React from 'react';
 import './TaskFormModal.css';
+import './App.css';
 
 const EditTaskModal = ({ onClose, onSave, editedTask, onInputChange }) => {
   const formatTaskDate = (date) => {
@@ -25,8 +26,8 @@ const EditTaskModal = ({ onClose, onSave, editedTask, onInputChange }) => {
           onChange={onInputChange}
         />
         <input type="date" name="date" value={formatTaskDate(editedTask.date)} onChange={onInputChange} />
-        <button onClick={handleSave}>Save Changes</button>
-        <button className="close-button" onClick={onClose}>
+        <button className="savechangesbutton" onClick={handleSave}>Save Changes</button>
+        <button className="closeeditbutton" onClick={onClose}>
           Close
         </button>
       </div>

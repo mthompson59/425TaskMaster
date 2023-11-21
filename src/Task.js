@@ -38,8 +38,8 @@ const Task = ({ task, onEdit, onDelete }) => {
           <span className="task-name"><strong>Task Name:</strong> {task.name}</span>
           <span className="task-description"><strong>Description:</strong> {task.description}</span>
           <span><strong>Date:</strong> {new Date(task.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</span>
-          <button onClick={() => setIsEditing(true)}>Edit</button>
-          <button onClick={() => onDelete(task)}>Delete</button>
+          <button className="edit-button" onClick={() => setIsEditing(true)}>Edit</button>
+          <button className="delete-button" onClick={() => onDelete(task)}>Delete</button>
         </div>
       )}
     </div>
