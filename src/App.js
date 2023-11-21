@@ -98,26 +98,20 @@ const App = () => {
     try {
       const currentDate = new Date();
       const editedDate = new Date(task.date);
-      const originalDate = new Date(task.date);
+      
   
       currentDate.setDate(currentDate.getDate() - 1);
       currentDate.setHours(0, 0, 0, 0);
   
       console.log('Current Date:', currentDate);
       console.log('Selected Date:', editedDate);
-      console.log('Selected Date:', originalDate);
   
-      // Check if the date value has changed
-      if (newTask.date !== task.date) {
-        // Check if the edited date is in the past
+      
         if (editedDate < currentDate) {
           setErrorMessage("You can't enter a date in the past");
-  
-          // Use the original date to set the date value
-          setNewTask({ ...newTask, date: originalDate.toISOString() });
           return;
         }
-      }
+      
   
       const response = await axios.put(`/api/tasks/${task._id}`, {
         ...task,
