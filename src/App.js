@@ -57,10 +57,15 @@ const App = () => {
 
   const handleAddTask = async () => {
     try {
-      const currentDate = new Date() -'T10:00:00' ;
-      const selectedDate = new Date(newTask.date + 'T00:00:00');
+      const currentDate = new Date()  ;
+      const selectedDate = new Date(newTask.date  +'T10:00:00');
+      currentDate.setHours(0, 0, 0, 0);
+      selectedDate.setHours(0, 0, 0, 0);
 
-      selectedDate.setMinutes(selectedDate.getMinutes() - selectedDate.getTimezoneOffset());
+      
+      
+      console.log('Current Date:', currentDate);
+      console.log('Selected Date:', selectedDate);
 
       if (selectedDate < currentDate) {
         setErrorMessage("You can't enter a date in the past");
@@ -81,6 +86,8 @@ const App = () => {
       ]);
       setNewTask({ name: '', description: '', date: '', completed: false });
       setIsModalOpen(false);
+      setErrorMessage(null);
+      fetchTasks();
     } catch (error) {
       console.error('Error adding task:', error);
       setErrorMessage('An error occurred while adding the task');
@@ -89,19 +96,34 @@ const App = () => {
 
   const handleEditTask = async (task) => {
     try {
-      const currentDate = new Date() -'T10:00:00' ;
-      const editedDate = new Date(task.date  );
-
-      if (editedDate < currentDate) {
-        setErrorMessage("You can't enter a date in the past");
-        return;
+      const currentDate = new Date();
+      const editedDate = new Date(task.date);
+      const originalDate = new Date(task.date);
+  
+      currentDate.setDate(currentDate.getDate() - 1);
+      currentDate.setHours(0, 0, 0, 0);
+  
+      console.log('Current Date:', currentDate);
+      console.log('Selected Date:', editedDate);
+      console.log('Selected Date:', originalDate);
+  
+      // Check if the date value has changed
+      if (newTask.date !== task.date) {
+        // Check if the edited date is in the past
+        if (editedDate < currentDate) {
+          setErrorMessage("You can't enter a date in the past");
+  
+          // Use the original date to set the date value
+          setNewTask({ ...newTask, date: originalDate.toISOString() });
+          return;
+        }
       }
-
+  
       const response = await axios.put(`/api/tasks/${task._id}`, {
         ...task,
         date: editedDate.toISOString(),
       });
-
+  
       const updatedTasks = tasks.map((t) =>
         t._id === response.data._id
           ? {
@@ -111,12 +133,14 @@ const App = () => {
           : t
       );
       setTasks(updatedTasks);
+      setErrorMessage(null);
+      fetchTasks();
     } catch (error) {
       console.error('Error editing task:', error);
       setErrorMessage('An error occurred while editing the task');
     }
   };
-
+  
   const handleDeleteTask = async (task) => {
     try {
       await axios.delete(`/api/tasks/${task._id}`);
