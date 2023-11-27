@@ -13,9 +13,9 @@ const App = () => {
   const [newTask, setNewTask] = useState({ name: '', description: '', date: '', completed: false });
   const [errorMessage, setErrorMessage] = useState(null);
   const [completedFilter, setCompletedFilter] = useState('all');
-  const [dateFilter, setDateFilter] = useState('all');
-  const [isModalOpen, setIsModalOpen] = useState(false); const today = new Date();
-
+  const [dateFilter, setDateFilter] = useState('closest'); // Updated default value to 'closest'
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const today = new Date();
 
   useEffect(() => {
     fetchTasks();
@@ -58,13 +58,11 @@ const App = () => {
 
   const handleAddTask = async () => {
     try {
-      const currentDate = new Date()  ;
-      const selectedDate = new Date(newTask.date  +'T10:00:00');
+      const currentDate = new Date();
+      const selectedDate = new Date(newTask.date + 'T10:00:00');
       currentDate.setHours(0, 0, 0, 0);
       selectedDate.setHours(0, 0, 0, 0);
 
-      
-      
       console.log('Current Date:', currentDate);
       console.log('Selected Date:', selectedDate);
 
@@ -97,31 +95,30 @@ const App = () => {
 
   const handleEditTask = async (task) => {
     try {
-      const currentDate = new Date();
-      const checkDate = new Date(task.date);
+      // Commented out the following lines to allow editing tasks with past dates
+      // const currentDate = new Date();
+      // const checkDate = new Date(task.date);
       let editedDate = new Date(task.date);
-      
-  
-      currentDate.setDate(currentDate.getDate()-1);
-      currentDate.setHours(0, 0, 0, 0);
-      checkDate.setDate(editedDate.getDate() );
-      checkDate.setHours(0,0,0,0)
-  
-      console.log('Current Date:', currentDate);
-      console.log('Selected Date:', checkDate);
-  
-      
-        if (checkDate < currentDate) {
-          setErrorMessage("You can't enter a date in the past");
-          return;
-        }
-      
-  
+
+      // currentDate.setDate(currentDate.getDate() - 1);
+      // currentDate.setHours(0, 0, 0, 0);
+      // checkDate.setDate(editedDate.getDate());
+      // checkDate.setHours(0, 0, 0, 0);
+
+      // console.log('Current Date:', currentDate);
+      // console.log('Selected Date:', checkDate);
+
+      // Commented out the condition to allow editing tasks with past dates
+      // if (checkDate < currentDate) {
+      //   setErrorMessage("You can't enter a date in the past");
+      //   return;
+      // }
+
       const response = await axios.put(`/api/tasks/${task._id}`, {
         ...task,
         date: editedDate.toISOString(),
       });
-  
+
       const updatedTasks = tasks.map((t) =>
         t._id === response.data._id
           ? {
@@ -138,7 +135,7 @@ const App = () => {
       setErrorMessage('An error occurred while editing the task');
     }
   };
-  
+
   const handleDeleteTask = async (task) => {
     try {
       await axios.delete(`/api/tasks/${task._id}`);
@@ -163,7 +160,7 @@ const App = () => {
   const handleToggleModal = () => {
     const today = new Date();
     const defaultDate = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
-  
+
     setIsModalOpen(!isModalOpen);
     setNewTask({
       name: '',
@@ -173,13 +170,23 @@ const App = () => {
     });
   };
 
+  const getFilteredLabel = () => {
+    if (completedFilter === 'completed') {
+      return 'Completed Tasks';
+    } else if (completedFilter === 'incomplete') {
+      return 'Incomplete Tasks';
+    } else {
+      return 'All Tasks';
+    }
+  };
+
   return (
     <div className="App">
       <Navbar onAddClick={handleToggleModal} />
       <div className="container">
         {errorMessage && <div className="error-message">{errorMessage}</div>}
         <div className="header-container">
-          <h2 className="all-tasks-heading">All Tasks</h2>
+          <h2 className="all-tasks-heading">{getFilteredLabel()}</h2>
           <div className="filters-container">
             <label>Status:</label>
             <select value={completedFilter} onChange={(e) => setCompletedFilter(e.target.value)}>

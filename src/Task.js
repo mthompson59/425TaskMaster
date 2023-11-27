@@ -5,6 +5,7 @@ import EditTaskModal from './EditTaskModal';
 const Task = ({ task, onEdit, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTask, setEditedTask] = useState({ ...task });
+  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
 
   const handleEdit = () => {
     onEdit(editedTask);
@@ -14,6 +15,17 @@ const Task = ({ task, onEdit, onDelete }) => {
   const handleCheckboxChange = () => {
     setEditedTask({ ...editedTask, completed: !editedTask.completed });
     onEdit({ ...editedTask, completed: !editedTask.completed });
+  };
+
+  const handleDeleteClick = () => {
+    setIsDeleteConfirmationOpen(true);
+  };
+
+  const handleDeleteConfirmation = (confirmed) => {
+    setIsDeleteConfirmationOpen(false);
+    if (confirmed) {
+      onDelete(task);
+    }
   };
 
   return (
@@ -39,7 +51,14 @@ const Task = ({ task, onEdit, onDelete }) => {
           <span className="task-description"><strong>Description:</strong> {task.description}</span>
           <span><strong>Date:</strong> {new Date(task.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</span>
           <button className="edit-button" onClick={() => setIsEditing(true)}>Edit</button>
-          <button className="delete-button" onClick={() => onDelete(task)}>Delete</button>
+          <button className="delete-button" onClick={handleDeleteClick}>Delete</button>
+          {isDeleteConfirmationOpen && (
+            <div className="delete-confirmation">
+              <p>Are you sure you want to delete this task?</p>
+              <button onClick={() => handleDeleteConfirmation(true)}>Confirm deletion</button>
+              <button onClick={() => handleDeleteConfirmation(false)}>Cancel</button>
+            </div>
+          )}
         </div>
       )}
     </div>
