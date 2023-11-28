@@ -184,7 +184,7 @@ const App = () => {
     <div className="App">
       <Navbar onAddClick={handleToggleModal} />
       <div className="container">
-        {errorMessage && <div className="error-message">{errorMessage}</div>}
+        {errorMessage && <div className="error-message error-text">{errorMessage}</div>}
         <div className="header-container">
           <h2 className="all-tasks-heading">{getFilteredLabel()}</h2>
           <div className="filters-container">
