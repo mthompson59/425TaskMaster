@@ -1,0 +1,20 @@
+How To start app
+
+How to open Frontend
+1. Open project in your choice of code editor
+2. Open terminal in editor
+3. type npm start and press enter
+4. wait for build to be completed
+5. If build fails type npm i and press enter then retry from step 3
+
+How to open Backend 
+1. rightclick on taskmanager-api on the left side of your screen and press open in intergrated terminal
+2. type node index.js and press enter
+3. 4. wait for build to be completed
+5. If build fails type npm i and press enter then retry from step 3
+6. if it still fails after you retry after step 5 then type npm i cors then retry from step 3.
+
+
+
+
+

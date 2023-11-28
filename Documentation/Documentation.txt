@@ -1,1 +1,22 @@
-1.
+How to add tasks 
+1. Press blue button in top right hand corror named "Add".
+2. A pop-up window will appear with the following fields "Task Name", Task Description", and "Date".
+3. You need to Enter in a Task Name but Description is optional ,and Date will be auto filled to todays date.
+4.if you wish to change the date you can either type in the date you wish for or click the mini calender icon and choose from there.
+5. Press save to create the new task.
+
+How to delete tasks
+1. If you wish to delete a task then all you will do is press the delete button that is associated with the task you wish to delete.
+2. after you press the button a second button will appear asking if you wish to delete that task if you do want to delete it then press "Confirm delete"
+3. if you dont want to delete it then press "Cancel"
+
+How to edit tasks
+1. If you wish to edit a task then all you will do is press the edit button that is associated with the task you wish to edit.
+2. A pop-up window will appear with the tasks Name, Description, and date. 
+3. you can change the infomation associated with the task the same you create the task.
+4. if you wish to change the completion of the task all you have to do is press the box above the task name and it will change from "Incompleted" to "Completed" or vise versa.
+
+How to change Filters
+1. If you wish to only see tasks that are either completed or incompleted all you have to do is select from the drop down menu in the top right cornor Labeled Status and either select "All", "Completed", or "Incompleted" and task that have the completion status that you select will appear.
+2. Task will automatically be sorted by Due date in order of date.
+3. if you wish to sort them with the fursest date then  select from the drop down menu in the top right cornor Labeled Date and either select "Closest" or "Fursest and tasks will be reordered according to date filter you selected.
