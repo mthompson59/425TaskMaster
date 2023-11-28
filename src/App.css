@@ -138,6 +138,7 @@ h1 {
 
 .header-container {
   display: flex;
+  flex-wrap: wrap; /* Allow items to wrap to the next line */
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
@@ -145,6 +146,7 @@ h1 {
 
 .all-tasks-heading {
   margin: 0;
+  flex-basis: 100%; /* Ensure each item takes up the full width on smaller screens */
 }
 
 .filters-container,
@@ -175,4 +177,12 @@ h1 {
 
 .filters-container label{
   color: #fff;
+}
+
+@media (max-width: 768px) {
+  .filters-container,
+  .sort-container {
+    margin-right: 0; /* Remove the right margin on smaller screens */
+    margin-top: 10px; /* Add some top margin to separate from the above content */
+  }
 }
