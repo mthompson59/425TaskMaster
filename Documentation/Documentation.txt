@@ -17,6 +17,6 @@ How to edit tasks
 4. if you wish to change the completion of the task all you have to do is press the box above the task name and it will change from "Incompleted" to "Completed" or vise versa.
 
 How to change Filters
-1. If you wish to only see tasks that are either completed or incompleted all you have to do is select from the drop down menu in the top right cornor Labeled Status and either select "All", "Completed", or "Incompleted" and task that have the completion status that you select will appear.
+1. If you wish to only see tasks that are either completed or incompleted all you have to do is select from the drop down menu in the  top center of the screen Labeled Status and either select "All", "Completed", or "Incompleted" and task that have the completion status that you select will appear.
 2. Task will automatically be sorted by Due date in order of date.
-3. if you wish to sort them with the fursest date then  select from the drop down menu in the top right cornor Labeled Date and either select "Closest" or "Fursest and tasks will be reordered according to date filter you selected.
+3. if you wish to sort them with the fursest date then  select from the drop down menu in the top center of the screen Labeled Date and either select "Closest" or "Fursest and tasks will be reordered according to date filter you selected.
